@@ -1,10 +1,12 @@
 {
   "name": "parking",
   "scripts": {
+    "start": "bun src/index.ts",
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
     "hono": "^4.6.9",
+    "serve-static": "^1.16.2",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
