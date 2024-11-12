@@ -1,4 +1,6 @@
 import { Hono } from "hono";
+import ReadAllCitiesController from "../controllers/ReadAllCitiesController";
+import ReadOneCityController from "../controllers/ReadOneCityController";
 
 const CityRoutes = new Hono();
 CityRoutes.get('/',(c)=>c.text("List de villes"));
