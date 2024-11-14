@@ -43,6 +43,8 @@ const ReadAllCitiesView = ({cities,parkings}: ReadAllCitiesViewProps)=>
         <div>
          <h1>Liste des villes</h1>
          <CitiesList cities={parkings}/>
+         <h2>Ville avec les parkings</h2>
+         <CitiesList cities={parkings}/>
             <ul>
             {cities.map((city) => (
     <li key={city.id}>
