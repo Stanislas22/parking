@@ -1,7 +1,10 @@
 import { Context } from "hono";
 import {parkings } from "../data/staticDatabase";
 import ReadAllParkingView from "../views/city/ReadAllParkingView"
-const ReadAllParkingsController = (c:Context)=>{
+import { db } from "../dataBase/initializeDatabase";
+const ReadAllParkingsController = async(c:Context)=>{
+    
+
     const html2 = ReadAllParkingView({parkings});
 
     return c.html(html2);
