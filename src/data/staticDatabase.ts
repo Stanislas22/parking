@@ -1,6 +1,6 @@
 import type { GPS } from "../types/GPS";
 
-import  city from "../models/City";
+import  City from "../models/City";
 
 import Parking from "../models/Parking";
 import { toSlug } from "../utils/toSlug";
@@ -11,11 +11,11 @@ const ChapelleCoordonnée : GPS = {latitude: 50.77635,longitude:6.083862};
 const LagunaCoordonnée : GPS = {latitude:28.487180709838867,longitude:-16.313879013061523};
 const newcastleCoordonnée : GPS = {latitude: 54.973847,longitude:-1.6131572};
 
-const AixProvence = new city("Aix-en-Provence","France",ProvenceCoordonnée);
-const LaSpezia = new city("La Spezia","Italie",SpeziaCoordonnée);
-const AixChapelle = new city("Aix-la-Chapelle","Allemagne",ChapelleCoordonnée);
-const Laguna = new city("San Cristobal de la laguna","Espagne",LagunaCoordonnée);
-const Newcastle = new city("Newcatle","Angleterre",newcastleCoordonnée);
+const AixProvence = new City("Aix-en-Provence","France",ProvenceCoordonnée);
+const LaSpezia = new City("La Spezia","Italie",SpeziaCoordonnée);
+const AixChapelle = new City("Aix-la-Chapelle","Allemagne",ChapelleCoordonnée);
+const Laguna = new City("San Cristobal de la laguna","Espagne",LagunaCoordonnée);
+const Newcastle = new City("Newcatle","Angleterre",newcastleCoordonnée);
 
 
 const parkingA = new Parking("Parking A",AixProvence.id,ProvenceCoordonnée,100,4.5);
@@ -34,7 +34,7 @@ Newcastle.parkingsIds.push(parkingF.id,parkingG.id);
 
 
 
-const cities : city[] = [AixProvence,LaSpezia,AixChapelle,Laguna,Newcastle];
+const cities : City[] = [AixProvence,LaSpezia,AixChapelle,Laguna,Newcastle];
  const parkings: Parking[]=[parkingA,parkingB,parkingC,parkingD,parkingE,parkingF,parkingG];
 
  export{cities,parkings};

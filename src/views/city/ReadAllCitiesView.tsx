@@ -16,11 +16,7 @@ const CityLink = ({citys} : {citys : City})=>(
     <li>
         <a href={`/cities/${citys.slug}`}>{citys.name} - {citys.country}
         </a>
-        {citys.parkingsIds.length>0}(
-        <p>Nombre de parking : ${citys.parkingsIds.length}</p>
-        ):(
-            <p>Pas de parking disponible</p>
-        )
+        
     </li>
 );
 const CitiesList = ({cities}: {cities : Array<City>})=>(
@@ -42,22 +38,11 @@ const ReadAllCitiesView = ({cities,parkings}: ReadAllCitiesViewProps)=>
     <Layout pageTitle="Liste des Villes" heading="Ville disponible">
         <div>
          <h1>Liste des villes</h1>
-         <CitiesList cities={parkings}/>
+         <CitiesList cities={cities}/>
          <h2>Ville avec les parkings</h2>
          <CitiesList cities={parkings}/>
             <ul>
-            {cities.map((city) => (
-    <li key={city.id}>
-        <a href={`/cities/${toSlug(city.name)}`}>{city.name} - {city.country}</a>
-        <p>Nombre de parking : ${city.parkingsIds.length}</p>
-        {city.parkingsIds && city.parkingsIds.length>0 &&(
-        <>
-        <h3>Parkings en {city.name}</h3>
-        
-        </>
-        )}
-    </li>
-     ))}
+           
             </ul>
             
     </div>
@@ -77,5 +62,8 @@ const ReadAllCitiesView = ({cities,parkings}: ReadAllCitiesViewProps)=>
         )}
     </li>
      ))}*/
+    /*{citys.parkingsIds.length>0}(
+        <p>Nombre de parking : ${citys.parkingsIds.length}</p>
+        )*/
 //<ParkingList parkings={city.parkings}/>
 export default ReadAllCitiesView;
