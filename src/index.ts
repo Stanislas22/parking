@@ -24,11 +24,11 @@ app.use('/parkings/*',appendTrailingSlash());
 app.get("/parkings/*",(c)=>c.text("With Trailing Slash"));
 app.use('/cities/*',trimTrailingSlash());
 app.get("/cities/*",(c)=>c.text("Without Trailing Slash"));
-app.onError((err,c)=>{
-  if (err instanceof HTTPException){
+//app.onError((err,c)=>{
+  /*if (err instanceof HTTPException){
     const statusCode = err.status;
     if(statusCode===404){
-      return c.html("Erreur du lié au serveur/ Veuillez réessayer plus tard",404);
+      return c.html("Erreur  lié au serveur/ Veuillez réessayer plus tard",404);
     }
     if(statusCode===500){
       return c.html("Désolé accès impossible/ Veuillez réessayer plus tard",500);
@@ -52,7 +52,7 @@ const handlers = factory.createHandlers(logger(),middleware,(c)=>{
   const fooValue = c.get('foo');
   return c.json({foo:fooValue});
 });
- handlers;
+ handlers;*/
 
 
 export default app;
