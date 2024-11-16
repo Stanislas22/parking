@@ -11,6 +11,7 @@ export  default class City{
     country:String;
     location : GPS;
     numberOfSpots: any;
+  parkings:Parking[]=[];
    
     
     
@@ -25,8 +26,8 @@ export  default class City{
     }
 
 
-    addParkingId(parkingId: number): number{
-        this.parkingsIds.push(parkingId);
-        return parkingId;
+    addParkingId(parking: Parking){
+        this.parkings.push(parking);
+       
     }
 }

@@ -26,7 +26,7 @@ const CitiesList = ({cities}: {cities : Array<City>})=>(
        ))}
     </ul>
 );
-const ParkingList = ({ parkings }: { parkings: Array<City> }) => (
+const ParkingList = ({ parkings }: { parkings: Array<Parking> }) => (
     <ul>
         {parkings.map((parking) => (
             <li key={parking.id}>{parking.name} - {parking.numberOfSpots} spots</li>
@@ -39,11 +39,23 @@ const ReadAllCitiesView = ({cities,parkings}: ReadAllCitiesViewProps)=>
         <div>
          <h1>Liste des villes</h1>
          <CitiesList cities={cities}/>
-         <h2>Ville avec les parkings</h2>
-         <CitiesList cities={parkings}/>
-            <ul>
-           
-            </ul>
+         <ul>
+            {cities.map(city=>(
+                <li key={city.slug}>
+                    <CityLink citys={city}/>
+                    <p>Nombre de parkings: {city.parkings.length}</p>
+                    {city.parkings.length>0}(
+                        <>
+                        <h3>Parkings en {city.name}</h3>
+                        <ParkingList parkings={city.parkings} />
+                    </>
+                    )
+                </li>
+            ))}
+         </ul>
+         
+        
+       
             
     </div>
     <a href="/">Back to Home</a>

@@ -4,7 +4,8 @@ import parkingRoutes from './routes/parkingRoutes'
 import { logger } from "hono/logger";
 import CityRoutes from './routes/cityRoutes'
 import HomeController from './controllers/HomeController';
-import {serveStatic} from 'hono/bun'
+import {serveStatic} from 'hono/bun';
+import { db } from './dataBase/initializeDatabase';
 import { cities,parkings } from './data/staticDatabase';
 import { html } from 'hono/html';
 import ReadAllCitiesController from './controllers/ReadAllCitiesController';
