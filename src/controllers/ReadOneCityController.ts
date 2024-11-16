@@ -4,17 +4,21 @@ import { toSlug } from "../utils/toSlug";
 import ReadOneCityView from "../views/city/ReadOneCityView"
 import { HTTPException } from 'hono/http-exception'
 import City from "../models/City";
-import React from "react";
-import ReactDOMServer from 'react-dom/server'
+import { PrismaClient } from "@prisma/client";
 import { db } from "../dataBase/initializeDatabase";
 import { html } from "hono/html";
 import Parking from "../models/Parking";
 import { ParkingData } from "../types/ParkingData";
 import { CityData } from "../types/CityData";
+const prisma = new PrismaClient();
 const ReadOneCityController =async(c:Context)=>{
     const {slug} = c.req.param();
     try{
-    const cityData = await db.prepare("SELECT * FROM cities WHERE slug = ?").get(slug) as CityData|undefined;
+    const cityData = await prisma.city.findUnique({
+        where:{slug},
+        include: {parkings:true},
+    });
+        //db.prepare("SELECT * FROM cities WHERE slug = ?").get(slug) as CityData|undefined;
     //const city = cities.find((city)=>toSlug(city.name)===slug);
     if(!cityData){
         throw new HTTPException(404,{message: `la ville avec le slug "${slug}" est introuvable.`});
@@ -22,17 +26,17 @@ const ReadOneCityController =async(c:Context)=>{
     const city = new City(
         cityData.name,
         cityData.country,
-        cityData.location,
+        JSON.parse(cityData.location),
         
         );
-        const parkingsData = await db.prepare("SELECT * FROM parkings WHERE city_id = ?").all(cityData.id) as ParkingData[];
+       /* const parkingsData = await db.prepare("SELECT * FROM parkings WHERE city_id = ?").all(cityData.id) as ParkingData[];
         if (!parkingsData || parkingsData.length === 0) {
             throw new HTTPException(404,{message: `Aucun parking trouvé pour la ville "${cityData.name}".`});
-        }
-        const associateParkings = parkingsData.map((row: ParkingData) => new Parking(
+        }*/
+        const associateParkings = cityData.parkings.map((row) => new Parking(
              row.name,
             row.city_id,
-            row.location,
+            JSON.parse(row.location),
             row.numberOfSpots,
             row.hourlyRate,
         ));
@@ -44,7 +48,7 @@ const ReadOneCityController =async(c:Context)=>{
     }*/
     
     
-   const hml =ReadOneCityView({city,parkings:associateParkings});
+   const hml =ReadOneCityView({city:city,parkings:associateParkings});
         return c.html(hml);
     }catch(error){
         console.error("Error:", error);

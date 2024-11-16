@@ -5,12 +5,15 @@ import ReadOneParkingView from "../views/city/ReadOneParkingView"
 import { db } from "../dataBase/initializeDatabase";
 import { ParkingData } from "../types/ParkingData";
 import Parking from "../models/Parking";
-
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 const ReadOneParkingController =async (c:Context)=>{
 
     const id = c.req.param("id");
     try{
-    const parkingData = await db.prepare("SELECT * FROM parkings WHERE id = ?").get(id) as ParkingData;
+    const parkingData = await prisma.parking.findUnique({
+        where:{id:parseInt(id)},
+        })//db.prepare("SELECT * FROM parkings WHERE id = ?").get(id) as ParkingData;
     
     //const parking = parkings.find((parking)=>parking.id===parseInt(id));
     if(!parkingData){
@@ -19,12 +22,12 @@ const ReadOneParkingController =async (c:Context)=>{
     const parking = new Parking(
         parkingData.name,
         parkingData.city_id,
-        parkingData.location,
+       JSON.parse(parkingData.location),
         parkingData.numberOfSpots,
         parkingData.hourlyRate
     );
     
-    const hml1 = ReadOneParkingView({parking});
+    const hml1 = ReadOneParkingView({parking:parking});
     return c.html(hml1);
 } catch (error) {
     console.error("Error in serveController:", error);

@@ -8,19 +8,22 @@ import Parking from "../models/Parking";
 import { CityData } from "../types/CityData";
 import { ParkingData } from "../types/ParkingData";
 import { HTTPException } from "hono/http-exception";
-
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const ReadAllCitiesController = async(c:Context)=>{
     try{
-    const citiesData = await db.prepare("SELECT * FROM cities").all() as CityData[];
-    const cities = citiesData.map((row:CityData)=> new City(
+    const citiesData = await prisma.city.findMany({
+        include:{parkings:true}
+    })//db.prepare("SELECT * FROM cities").all() as CityData[];
+    const cities = citiesData.map((row)=> new City(
         row.name,
         row.country,
-        row.location
+        JSON.parse(row.location)
 
     ));
 
-    const parkingsData =await db.prepare("SELECT * FROM parkings").all() as ParkingData[];
+   /* const parkingsData =await db.prepare("SELECT * FROM parkings").all() as ParkingData[];
     const parkings = parkingsData.map((row:ParkingData)=>new Parking(
         row.name,
         row.city_id,
@@ -28,13 +31,19 @@ const ReadAllCitiesController = async(c:Context)=>{
         row.numberOfSpots,
         row.hourlyRate
        
-    ));
+    ));*/
     cities.forEach(city => {
-        city.parkings = parkings.filter(parking => city.parkingsIds.includes(parking.city_id));
+        city.parkings = parkings.map((parkingRow:any) => new Parking(
+            parkingRow.name,
+            parkingRow.city_id,
+            parkingRow.location,
+            parkingRow.numberOfSpots,
+            parkingRow.hourlyRate
+        ));
     });
    
    //const citiesparkings = cities.filter(city=>city.parkingsIds.length>0);
-    const html1 = ReadAllCitiesView({cities,parkings:cities});
+    const html1 = ReadAllCitiesView({cities:cities,parkings:cities});
 
     return c.html(html1);
 }catch(err){

@@ -5,18 +5,20 @@ import { db } from "../dataBase/initializeDatabase";
 import Parking from "../models/Parking";
 import { ParkingData } from "../types/ParkingData";
 import { HTTPException } from "hono/http-exception";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 const ReadAllParkingsController = async(c:Context)=>{
     try{
-    const parkingsData = await db.prepare("SELECT * FROM parkings").all() as ParkingData[];
-    const parkings = parkingsData.map((row: ParkingData) => new Parking(
+    const parkingsData = await prisma.parking.findMany();// db.prepare("SELECT * FROM parkings").all() as ParkingData[];
+    const parkings = parkingsData.map((row) => new Parking(
         row.name,
         row.city_id,
-        row.location,
+        JSON.parse(row.location),
         row.numberOfSpots,
         row.hourlyRate
     ));
-    const html2 = ReadAllParkingView({parkings});
-    ;
+    const html2 = ReadAllParkingView({parkings:parkings});
+    
     return c.html(html2);
 } catch (error) {
     console.error("Error in ServerController:", error);
