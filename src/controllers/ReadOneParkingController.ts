@@ -16,7 +16,6 @@ const ReadOneParkingController =async (c:Context)=>{
         where:{name:parkingnom},
         
         });
-        console.log("Parking data:", parkingData);
     if(!parkingData){
         throw new HTTPException(404,{message:` Parking avec l'ID "${parkingnom}" introuvable`});
     }
