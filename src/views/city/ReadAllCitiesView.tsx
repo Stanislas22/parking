@@ -6,52 +6,44 @@ import { parkings} from "../../data/staticDatabase";
 import Parking from "../../models/Parking";
 import { toSlug } from "../../utils/toSlug";
 import React from "react";
+import { CityDTO } from "../../DTO/CityDTO";
+import { ParkingDTO } from "../../DTO/ParkingDTO";
 type ReadAllCitiesViewProps = {
-    cities : Array<City>;
-    parkings : Array<City>
+    cities : Array<CityDTO>;
+    //parkings : Array<CityDTO>
     
 
 };
-const CityLink = ({citys} : {citys : City})=>(
+const CityLink = ({citys} : {citys : CityDTO})=>(
     <li>
         <a href={`/cities/${citys.slug}`}>{citys.name} - {citys.country}
         </a>
         
     </li>
 );
-const CitiesList = ({cities}: {cities : Array<City>})=>(
+const CitiesList = ({cities}: {cities : Array<CityDTO>})=>(
     <ul>
        {cities.map(city=>(
-        <CityLink key={city.id} citys={city}/>
+        <CityLink citys={city}/>
        ))}
     </ul>
 );
-const ParkingList = ({ parkings }: { parkings: Array<Parking> }) => (
+const ParkingList = ({ parkings }: { parkings: Array<ParkingDTO> }) => (
     <ul>
         {parkings.map((parking) => (
-            <li key={parking.id}>{parking.name} - {parking.numberOfSpots} spots</li>
+            <li key={parking.name}>{parking.name} - {parking.numberOfPlaces} spots</li>
         ))}
     </ul>
 );
 
-const ReadAllCitiesView = ({cities,parkings}: ReadAllCitiesViewProps)=>
+const ReadAllCitiesView = ({cities}: ReadAllCitiesViewProps)=>
     <Layout pageTitle="Liste des Villes" heading="Ville disponible">
         <div>
          <h1>Liste des villes</h1>
          <CitiesList cities={cities}/>
          <ul>
-            {cities.map(city=>(
-                <li key={city.slug}>
-                    <CityLink citys={city}/>
-                    <p>Nombre de parkings: {city.parkings.length}</p>
-                    {city.parkings.length>0}(
-                        <>
-                        <h3>Parkings en {city.name}</h3>
-                        <ParkingList parkings={city.parkings} />
-                    </>
-                    )
-                </li>
-            ))}
+            
+                    
          </ul>
          
         

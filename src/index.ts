@@ -24,8 +24,8 @@ app.use('/parkings/*',appendTrailingSlash());
 app.get("/parkings/*",(c)=>c.text("With Trailing Slash"));
 app.use('/cities/*',trimTrailingSlash());
 app.get("/cities/*",(c)=>c.text("Without Trailing Slash"));
-//app.onError((err,c)=>{
-  /*if (err instanceof HTTPException){
+app.onError((err,c)=>{
+  if (err instanceof HTTPException){
     const statusCode = err.status;
     if(statusCode===404){
       return c.html("Erreur  lié au serveur/ Veuillez réessayer plus tard",404);
@@ -39,10 +39,10 @@ app.get("/cities/*",(c)=>c.text("Without Trailing Slash"));
   
 })
 
-//app.get('/cities',ReadAllCitiesController);
-//app.get('/cities/:slug',ReadOneCityController);
-//app.get('/parkings',ReadAllParkingsController);
-//app.get('/parkings/: id', ReadOneParkingController);
+/*app.get('/cities',ReadAllCitiesController);
+app.get('/cities/:slug',ReadOneCityController);
+app.get('/parkings',ReadAllParkingsController);
+app.get('/parkings/: id', ReadOneParkingController);*/
 const middleware = factory.createMiddleware(async (c,next)=>{
   c.set('foo','bar');
   await  next();
@@ -52,7 +52,7 @@ const handlers = factory.createHandlers(logger(),middleware,(c)=>{
   const fooValue = c.get('foo');
   return c.json({foo:fooValue});
 });
- handlers;*/
+ handlers;
 
 
 export default app;

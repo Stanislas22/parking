@@ -77,7 +77,7 @@ db.run(`
 
 
       function generateUniqueSlug(name: string, existingSlugs: Set<String>): String {
-        var slug = toSlug(name);
+         var slug = toSlug(name);
         let counter = 1;
       
         while (existingSlugs.has(slug)) {

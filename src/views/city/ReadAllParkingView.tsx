@@ -5,18 +5,19 @@ import { html } from "hono/html";
 import { parkings} from "../../data/staticDatabase";
 import Parking from "../../models/Parking";
 import { toSlug } from "../../utils/toSlug";
+import { ParkingDTO } from "../../DTO/ParkingDTO";
 
 type ReadAllParkingViewProps = {
-    parkings : Array<Parking>
+    parkings : Array<ParkingDTO>
     
 
 };
 
-const ParkingList = ({ parkings }: { parkings: Array<Parking> }) => (
+const ParkingList = ({ parkings }: { parkings: Array<ParkingDTO> }) => (
     <ul>
         {parkings.map((parking) => (
-            <li key={parking.id}>
-                <a href={`/parkings/${parking.id}`}>{parking.name} - {parking.numberOfSpots}</a></li>
+            <li key={parking.name}>
+                <a href={`/parkings/${parking.name}`}>{parking.name} - {parking.numberOfPlaces}</a></li>
         ))}
     </ul>
 );

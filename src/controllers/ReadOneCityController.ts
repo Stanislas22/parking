@@ -8,8 +8,8 @@ import { PrismaClient } from "@prisma/client";
 import { db } from "../dataBase/initializeDatabase";
 import { html } from "hono/html";
 import Parking from "../models/Parking";
-import { ParkingData } from "../types/ParkingData";
-import { CityData } from "../types/CityData";
+import { CityDTO } from "../DTO/CityDTO";
+import { ParkingDTO } from "../DTO/ParkingDTO";
 const prisma = new PrismaClient();
 const ReadOneCityController =async(c:Context)=>{
     const {slug} = c.req.param();
@@ -18,37 +18,29 @@ const ReadOneCityController =async(c:Context)=>{
         where:{slug},
         include: {parkings:true},
     });
-        //db.prepare("SELECT * FROM cities WHERE slug = ?").get(slug) as CityData|undefined;
-    //const city = cities.find((city)=>toSlug(city.name)===slug);
     if(!cityData){
         throw new HTTPException(404,{message: `la ville avec le slug "${slug}" est introuvable.`});
     } 
-    const city = new City(
+    const city = new CityDTO(
+        cityData.id,
         cityData.name,
         cityData.country,
-        JSON.parse(cityData.location),
+        cityData.location,
+        cityData.slug,
+        cityData.parkings.map((parkingRow:ParkingDTO)=> new ParkingDTO(
+            parkingRow.id,
+            parkingRow.name,
+            parkingRow.city_id,
+            parkingRow.location,
+            parkingRow.numberOfPlaces,
+            parkingRow.hourlyRate
+        ))
         
         );
-       /* const parkingsData = await db.prepare("SELECT * FROM parkings WHERE city_id = ?").all(cityData.id) as ParkingData[];
-        if (!parkingsData || parkingsData.length === 0) {
-            throw new HTTPException(404,{message: `Aucun parking trouvé pour la ville "${cityData.name}".`});
-        }*/
-        const associateParkings = cityData.parkings.map((row) => new Parking(
-             row.name,
-            row.city_id,
-            JSON.parse(row.location),
-            row.numberOfSpots,
-            row.hourlyRate,
-        ));
-   /*const associateParkings = parkings.filter((parking)=>parking.city_id===city.id
-    );
-    if(!associateParkings){
-        throw new HTTPException(404);
-
-    }*/
+       
     
     
-   const hml =ReadOneCityView({city:city,parkings:associateParkings});
+   const hml =ReadOneCityView({city});
         return c.html(hml);
     }catch(error){
         console.error("Error:", error);

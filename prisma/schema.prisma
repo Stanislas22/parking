@@ -14,20 +14,38 @@ datasource db {
 }
 
 model City {
-  id          Int      @id @default(autoincrement())
-  name        String
-  country     String
-  location    String
-  slug        String   @unique
-  parkings    Parking[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  country  String
+  location String
+  slug     String    @unique
+  parkings Parking[]
 }
 
 model Parking {
-  id          Int      @id @default(autoincrement())
-  name        String
-  city_id     Int
-  location    String
-  numberOfSpots Int
-  hourlyRate  Float
-  city        City     @relation(fields: [city_id], references: [id])
+  id             Int    @id @default(autoincrement())
+  name           String
+  city_id        Int
+  location       String
+  numberOfPlaces Int
+  hourlyRate     Float
+  city           City   @relation(fields: [city_id], references: [id])
+  spots          Spot[]
+}
+
+model Park {
+  id                 String    @id
+  startedAt          DateTime
+  endedAt            DateTime?
+  vehicleNumberPlate String
+  spotId             Int
+  price              Float     @default(0)
+  spot               Spot      @relation(fields: [spotId], references: [id])
+}
+
+model Spot {
+  id        Int     @id @default(autoincrement())
+  parkingId Int
+  parking   Parking @relation(fields: [parkingId], references: [id])
+  parks     Park[]
 }

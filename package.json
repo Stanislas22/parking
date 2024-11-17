@@ -1,6 +1,7 @@
 {
   "name": "parking",
   "scripts": {
+    "seed":"bun src/seed.ts",
     "start": "bun src/index.ts",
     "dev": "bun run --hot src/index.ts"
   },

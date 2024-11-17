@@ -6,18 +6,20 @@ import Parking from "../models/Parking";
 import { ParkingData } from "../types/ParkingData";
 import { HTTPException } from "hono/http-exception";
 import { PrismaClient } from "@prisma/client";
+import { ParkingDTO } from "../DTO/ParkingDTO";
 const prisma = new PrismaClient();
 const ReadAllParkingsController = async(c:Context)=>{
     try{
-    const parkingsData = await prisma.parking.findMany();// db.prepare("SELECT * FROM parkings").all() as ParkingData[];
-    const parkings = parkingsData.map((row) => new Parking(
+    const parkingsData = await prisma.parking.findMany();
+    const parkings = parkingsData.map((row: ParkingDTO ) => new ParkingDTO(
+        row.id,
         row.name,
         row.city_id,
-        JSON.parse(row.location),
-        row.numberOfSpots,
+        row.location,
+        row.numberOfPlaces,
         row.hourlyRate
     ));
-    const html2 = ReadAllParkingView({parkings:parkings});
+    const html2 = ReadAllParkingView({parkings});
     
     return c.html(html2);
 } catch (error) {
@@ -26,5 +28,4 @@ const ReadAllParkingsController = async(c:Context)=>{
 }
 
 };
-//console.log("parkings: " , parkings)
 export default ReadAllParkingsController;

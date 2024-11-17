@@ -6,28 +6,30 @@ import { db } from "../dataBase/initializeDatabase";
 import { ParkingData } from "../types/ParkingData";
 import Parking from "../models/Parking";
 import { PrismaClient } from "@prisma/client";
+import { ParkingDTO } from "../DTO/ParkingDTO";
 const prisma = new PrismaClient();
 const ReadOneParkingController =async (c:Context)=>{
-
-    const id = c.req.param("id");
-    try{
-    const parkingData = await prisma.parking.findUnique({
-        where:{id:parseInt(id)},
-        })//db.prepare("SELECT * FROM parkings WHERE id = ?").get(id) as ParkingData;
     
-    //const parking = parkings.find((parking)=>parking.id===parseInt(id));
+    const parkingnom = c.req.param("id");
+    try{
+    const parkingData = await prisma.parking.findFirst({
+        where:{name:parkingnom},
+        
+        });
+        console.log("Parking data:", parkingData);
     if(!parkingData){
-        throw new HTTPException(404,{message:` Parking avec l'ID "${id}" introuvable`});
+        throw new HTTPException(404,{message:` Parking avec l'ID "${parkingnom}" introuvable`});
     }
-    const parking = new Parking(
+    const parking = new ParkingDTO(
+        parkingData.id,
         parkingData.name,
         parkingData.city_id,
-       JSON.parse(parkingData.location),
-        parkingData.numberOfSpots,
+       parkingData.location,
+        parkingData.numberOfPlaces,
         parkingData.hourlyRate
     );
     
-    const hml1 = ReadOneParkingView({parking:parking});
+    const hml1 = ReadOneParkingView({parking});
     return c.html(hml1);
 } catch (error) {
     console.error("Error in serveController:", error);
